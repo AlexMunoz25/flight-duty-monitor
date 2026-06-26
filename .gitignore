@@ -8,6 +8,7 @@
 .*/
 !.git/
 !.github/
+References/
 
 # Python
 __pycache__/
@@ -41,6 +42,10 @@ ENV/
 Thumbs.db
 *.swp
 *.swo
+
+# Working data and generated outputs
+data/
+*.parquet
 
 # Build outputs and executables
 dist/

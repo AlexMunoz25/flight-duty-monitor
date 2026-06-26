@@ -1,0 +1,197 @@
+body {
+    background-color: #0d1117;
+    color: #e6edf3;
+}
+
+.fdm-page {
+    padding: 20px 28px;
+    max-width: 1680px;
+    margin: 0 auto;
+}
+
+.fdm-header {
+    margin-bottom: 18px;
+}
+
+.fdm-title {
+    font-size: 24px;
+    font-weight: 600;
+    color: #e6edf3;
+}
+
+.fdm-subtitle {
+    font-size: 13px;
+    color: #8b949e;
+    margin-top: 2px;
+}
+
+.fdm-filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 16px;
+    padding: 14px 16px;
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.fdm-filter {
+    display: flex;
+    flex-direction: column;
+    min-width: 170px;
+}
+
+.fdm-filter-reset {
+    min-width: 0;
+    justify-content: flex-end;
+}
+
+.fdm-filter-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: #8b949e;
+    margin-bottom: 5px;
+}
+
+.fdm-info {
+    margin-left: 5px;
+    color: #8b949e;
+    cursor: help;
+    font-size: 11px;
+}
+
+.fdm-info:hover {
+    color: #1d8d84;
+}
+
+/* guide / help panel */
+.fdm-guide {
+    margin-bottom: 16px;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.fdm-guide .accordion-button,
+.fdm-guide .accordion-body {
+    background-color: #161b22;
+    color: #e6edf3;
+}
+
+.fdm-guide .accordion-button:not(.collapsed) {
+    color: #e6edf3;
+    box-shadow: none;
+}
+
+.fdm-guide-intro {
+    color: #e6edf3;
+    font-size: 13px;
+    margin-bottom: 12px;
+}
+
+.fdm-guide-title {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.fdm-guide-list {
+    margin: 6px 0 0 0;
+    padding-left: 18px;
+    color: #8b949e;
+    font-size: 12.5px;
+    line-height: 1.55;
+}
+
+.fdm-dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.fdm-dot-high {
+    background-color: #f85149;
+}
+
+.fdm-dot-medium {
+    background-color: #d29922;
+}
+
+/* section headers above chart and grid */
+.fdm-section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.fdm-section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+}
+
+.fdm-kpi-row {
+    margin-bottom: 16px;
+}
+
+.fdm-kpi-label {
+    display: flex;
+    align-items: center;
+}
+
+.fdm-kpi {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    min-width: 150px;
+}
+
+.fdm-kpi-value {
+    font-size: 26px;
+    font-weight: 700;
+    color: #e6edf3;
+}
+
+.fdm-kpi-label {
+    font-size: 12px;
+    color: #8b949e;
+    margin-top: 2px;
+}
+
+.fdm-chart-card,
+.fdm-grid-card {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    margin-bottom: 16px;
+}
+
+.fdm-filter .form-select,
+.fdm-filter .form-control {
+    background-color: #0d1117;
+    color: #e6edf3;
+    border-color: #30363d;
+}
+
+/* dark theme for the dcc.Dropdown controls (Rank, Home base).
+   Dash 4 renders these with design tokens; overriding the tokens on the
+   trigger and the portaled menu themes the whole control to match. */
+.fdm-dropdown,
+.dash-dropdown-content {
+    --Dash-Fill-Inverse-Strong: #0d1117;
+    --Dash-Stroke-Strong: #30363d;
+    --Dash-Stroke-Weak: rgba(255, 255, 255, 0.1);
+    --Dash-Text-Strong: #e6edf3;
+    --Dash-Text-Primary: #e6edf3;
+    --Dash-Text-Weak: #8b949e;
+    --Dash-Text-Disabled: #8b949e;
+    --Dash-Fill-Disabled: rgba(255, 255, 255, 0.1);
+    --Dash-Fill-Primary-Hover: rgba(255, 255, 255, 0.06);
+    --Dash-Fill-Primary-Active: rgba(255, 255, 255, 0.1);
+    --Dash-Fill-Interactive-Strong: #1d8d84;
+    --Dash-Fill-Interactive-Weak: rgba(29, 141, 132, 0.18);
+}
