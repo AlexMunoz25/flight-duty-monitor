@@ -1,0 +1,51 @@
+# Environment and secrets
+.env
+.env.*
+*.env
+!.env.example
+
+# Hidden project/tool folders
+.*/
+!.git/
+!.github/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+
+# Spreadsheets and office temp files
+*.xlsx
+*.xls
+*.xlsm
+~$*
+
+# Markdown docs, except README
+*.md
+!README.md
+!README.MD
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+
+# Build outputs and executables
+dist/
+build/
+*.egg-info/
+*.exe
+*.app
+*.dSYM/
