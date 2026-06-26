@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -m py_compile check_dependencies.py)",
+      "Bash(python3 check_dependencies.py)",
+      "Bash(echo \"\\(exit code: $?\\)\")",
+      "Bash(echo \"\\(exit $?\\)\")"
+    ]
+  }
+}
