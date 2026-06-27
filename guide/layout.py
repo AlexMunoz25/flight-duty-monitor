@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import html
 
-from fdm.alerts.fatigue import LOW_ALERTNESS_THRESHOLD, WEEKLY_BLOCK_LIMIT_HOURS
+from alerts.fatigue import LOW_ALERTNESS_THRESHOLD, WEEKLY_BLOCK_LIMIT_HOURS
 
 _ALERTNESS_HIGH = LOW_ALERTNESS_THRESHOLD // 2
 _BLOCK_HIGH = round(WEEKLY_BLOCK_LIMIT_HOURS * 1.2)

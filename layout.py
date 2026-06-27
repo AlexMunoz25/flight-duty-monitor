@@ -1,9 +1,9 @@
 from dash import html
 
-from fdm.dashboard.filters.layout import filters_layout
-from fdm.dashboard.guide import guide_panel
-from fdm.dashboard.stores import STORES
-from fdm.dashboard.warnings.layout import warnings_layout
+from fatigue_warnings.layout import warnings_layout
+from filters.layout import filters_layout
+from guide.layout import guide_panel
+from stores import STORES
 
 
 def header():

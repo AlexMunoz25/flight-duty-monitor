@@ -1,7 +1,8 @@
 from dash import Input, Output
 
-from fdm.dashboard.data import apply_filters
-from fdm.dashboard.warnings.components import grid_rows, kpi_cards, severity_chart
+from data import apply_filters
+from fatigue_warnings.components import kpi_cards
+from fatigue_warnings.utils import grid_rows, severity_chart
 
 
 def warnings_callbacks(app):

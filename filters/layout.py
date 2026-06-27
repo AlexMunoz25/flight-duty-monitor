@@ -1,8 +1,8 @@
 import dash_bootstrap_components as dbc
 from dash import html
 
-from fdm.dashboard.data import WARNING_TYPE_LABELS, distinct_values
-from fdm.dashboard.filters.components import multi_field, search_field, select_field
+from data import WARNING_TYPE_LABELS, distinct_values
+from filters.components import multi_field, search_field, select_field
 
 
 def filters_layout():

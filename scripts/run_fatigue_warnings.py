@@ -2,12 +2,12 @@ import sys
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(REPO_ROOT / "src"))
+sys.path.insert(0, str(REPO_ROOT))
 
 import polars as pl
 
-from fdm.alerts.fatigue import fatigue_warnings
-from fdm.ingestion.roster import load_roster
+from alerts.fatigue import fatigue_warnings
+from ingestion.roster import load_roster
 
 ROSTER_PATH = REPO_ROOT / "template.xlsx"
 OUTPUT_PATH = REPO_ROOT / "data" / "fatigue_warnings.csv"

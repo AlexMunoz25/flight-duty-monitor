@@ -4,10 +4,10 @@ from pathlib import Path
 
 import polars as pl
 
-from fdm.alerts.fatigue import fatigue_warnings
-from fdm.ingestion.roster import load_roster
+from alerts.fatigue import fatigue_warnings
+from ingestion.roster import load_roster
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+REPO_ROOT = Path(__file__).resolve().parent
 ROSTER_PATH = Path(os.environ.get("FDM_ROSTER_PATH", REPO_ROOT / "template.xlsx"))
 
 WARNING_TYPE_LABELS = {
@@ -41,13 +41,3 @@ def apply_filters(warning_type=None, severity=None, ranks=None, homebases=None, 
         id_match = pl.col("crew_id").cast(pl.String).str.contains(needle, literal=True)
         frame = frame.filter(name_match | id_match)
     return frame
-
-
-def to_records(frame):
-    display = frame.with_columns(
-        pl.col("window_start").cast(pl.String),
-        pl.col("window_end").cast(pl.String),
-        pl.col("block_hours").round(1),
-        pl.col("warning_type").replace_strict(WARNING_TYPE_LABELS, default=pl.col("warning_type")).alias("type_label"),
-    )
-    return display.to_dicts()

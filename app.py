@@ -1,10 +1,10 @@
 import dash_bootstrap_components as dbc
 from dash import Dash
 
-from fdm.dashboard.data import warnings_frame
-from fdm.dashboard.filters.callbacks import filters_callbacks
-from fdm.dashboard.layout import root_layout
-from fdm.dashboard.warnings.callbacks import warnings_callbacks
+from data import warnings_frame
+from fatigue_warnings.callbacks import warnings_callbacks
+from filters.callbacks import filters_callbacks
+from layout import root_layout
 
 FEATURE_CALLBACKS = [filters_callbacks, warnings_callbacks]
 

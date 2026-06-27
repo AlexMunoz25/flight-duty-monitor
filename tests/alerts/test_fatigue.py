@@ -2,7 +2,7 @@ import datetime as dt
 
 import polars as pl
 
-from fdm.alerts.fatigue import (
+from alerts.fatigue import (
     WARNING_COLUMNS,
     block_hour_warnings,
     fatigue_warnings,

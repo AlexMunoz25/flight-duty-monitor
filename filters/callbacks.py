@@ -1,10 +1,6 @@
 from dash import Input, Output
 
-from fdm.dashboard.filters.components import ALL
-
-
-def _clear(value):
-    return None if value in (None, "", ALL) else value
+from filters.utils import ALL, clear_sentinel
 
 
 def filters_callbacks(app):
@@ -18,8 +14,8 @@ def filters_callbacks(app):
     )
     def collect_filters(warning_type, severity, ranks, homebases, crew):
         return {
-            "warning_type": _clear(warning_type),
-            "severity": _clear(severity),
+            "warning_type": clear_sentinel(warning_type),
+            "severity": clear_sentinel(severity),
             "ranks": ranks,
             "homebases": homebases,
             "crew": crew,

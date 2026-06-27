@@ -1,7 +1,7 @@
 import dash_bootstrap_components as dbc
 from dash import dcc, html
 
-ALL = "all"
+from filters.utils import ALL
 
 
 def _field(field_id, label, control, help_text):
