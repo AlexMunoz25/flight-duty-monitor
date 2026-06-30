@@ -2,7 +2,7 @@ from dash import dcc, html
 
 from fatigue_warnings.layout import warnings_layout
 from filters.layout import filters_layout
-from guide.layout import guide_panel
+from guide import guide_panel
 from stores import STORES
 from upload.layout import empty_state, upload_control
 
