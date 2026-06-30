@@ -1,0 +1,25 @@
+from dash import dcc, html
+
+
+def upload_control():
+    return dcc.Upload(
+        id="roster-upload",
+        accept=".xlsx",
+        multiple=False,
+        className="fdm-upload",
+        children=html.Span("⬆  Upload roster (.xlsx)"),
+    )
+
+
+def empty_state():
+    return html.Div(
+        [
+            html.Div("No roster loaded", className="fdm-empty-title"),
+            html.Div(
+                "Use Upload roster (top right) to select an .xlsx roster export. "
+                "Fatigue warnings appear here once it is read.",
+                className="fdm-empty-hint",
+            ),
+        ],
+        className="fdm-empty",
+    )

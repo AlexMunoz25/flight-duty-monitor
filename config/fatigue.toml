@@ -1,0 +1,4 @@
+[fatigue]
+low_alertness_threshold = 2500
+weekly_block_limit_hours = 30
+rolling_window = "7d"

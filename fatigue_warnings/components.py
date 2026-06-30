@@ -2,7 +2,7 @@ import dash_ag_grid as dag
 import dash_bootstrap_components as dbc
 from dash import html
 
-from fatigue_warnings.models import COLUMN_DEFS, DEFAULT_COL_DEF, KPI_DEFS
+from fatigue_warnings.models import DEFAULT_COL_DEF
 from theme import GRID_THEME
 
 
@@ -21,7 +21,7 @@ def kpi_card(index, label, value, help_text):
     card_id = f"kpi-card-{index}"
     body = dbc.CardBody(
         [
-            html.Div(f"{value:,}", className="fdm-kpi-value"),
+            html.Div(f"{value:,}" if isinstance(value, int | float) else value, className="fdm-kpi-value"),
             html.Div([label, html.Span("ⓘ", className="fdm-info")], className="fdm-kpi-label"),
         ]
     )
@@ -31,14 +31,14 @@ def kpi_card(index, label, value, help_text):
     )
 
 
-def kpi_cards(frame):
-    return [kpi_card(index, label, value(frame), help_text) for index, (label, value, help_text) in enumerate(KPI_DEFS)]
+def kpi_cards(cards):
+    return [kpi_card(index, card["label"], card["value"], card["help"]) for index, card in enumerate(cards)]
 
 
-def warnings_grid():
+def detail_grid(grid_id, column_defs, height="320px"):
     return dag.AgGrid(
-        id="warnings-grid",
-        columnDefs=COLUMN_DEFS,
+        id=grid_id,
+        columnDefs=column_defs,
         defaultColDef=DEFAULT_COL_DEF,
         className=GRID_THEME,
         dashGridOptions={
@@ -47,5 +47,5 @@ def warnings_grid():
             "animateRows": False,
             "tooltipShowDelay": 300,
         },
-        style={"height": "calc(100vh - 430px)", "minHeight": "320px"},
+        style={"height": height, "minHeight": "260px"},
     )

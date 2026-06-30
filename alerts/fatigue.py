@@ -1,8 +1,11 @@
 import polars as pl
 
-LOW_ALERTNESS_THRESHOLD = 2500
-WEEKLY_BLOCK_LIMIT_HOURS = 30
-ROLLING_WINDOW = "7d"
+from analytics.operational_review import operational_legs, rolling_block_hour_events
+from config.fatigue import FATIGUE_CONFIG
+
+LOW_ALERTNESS_THRESHOLD = FATIGUE_CONFIG.low_alertness_threshold
+WEEKLY_BLOCK_LIMIT_HOURS = FATIGUE_CONFIG.weekly_block_limit_hours
+ROLLING_WINDOW = FATIGUE_CONFIG.rolling_window
 
 WARNING_COLUMNS = [
     "warning_type",
@@ -20,15 +23,6 @@ WARNING_COLUMNS = [
     "severity",
     "message",
 ]
-
-
-def operational_legs(roster):
-    return roster.filter(
-        pl.col("onduty")
-        & pl.col("flightduty")
-        & pl.col("lnum").is_not_null()
-        & pl.col("ldep_timeHB").is_not_null()
-    )
 
 
 def low_alertness_warnings(roster, threshold=LOW_ALERTNESS_THRESHOLD):
@@ -65,52 +59,13 @@ def low_alertness_warnings(roster, threshold=LOW_ALERTNESS_THRESHOLD):
 
 
 def block_hour_warnings(roster, limit=WEEKLY_BLOCK_LIMIT_HOURS, window=ROLLING_WINDOW):
-    legs = operational_legs(roster)
-    daily = (
-        legs.with_columns(pl.col("ldep_timeHB").dt.date().alias("day"))
-        .group_by("crew_id", "fullname", "rank", "homebase", "day")
-        .agg(pl.col("lblock_hours").sum().alias("day_block"))
-        .sort("crew_id", "day")
-        .rechunk()
-    )
-    rolling = daily.with_columns(
-        pl.col("day_block")
-        .rolling_sum_by("day", window, closed="right")
-        .over("crew_id")
-        .alias("rolling_block")
-    )
+    rolling = rolling_block_hour_events(roster, limit, window)
     peak = (
-        rolling.filter(pl.col("rolling_block") > limit)
-        .group_by("crew_id")
-        .agg(pl.all().sort_by("rolling_block", descending=True).first())
+        rolling.group_by("crew_id")
+        .agg(pl.all().sort_by("block_hours", descending=True).first())
+        .select(WARNING_COLUMNS)
     )
-    severity = (
-        pl.when(pl.col("rolling_block") > limit * 1.2)
-        .then(pl.lit("HIGH"))
-        .otherwise(pl.lit("MEDIUM"))
-    )
-    message = pl.format(
-        "{} block hours in 7 days ending {} (limit {})",
-        pl.col("rolling_block").round(1),
-        pl.col("day"),
-        pl.lit(limit),
-    )
-    return peak.select(
-        pl.lit("block_hours_7d").alias("warning_type"),
-        "crew_id",
-        "fullname",
-        "rank",
-        "homebase",
-        (pl.col("day") - pl.duration(days=6)).alias("window_start"),
-        pl.col("day").alias("window_end"),
-        pl.lit(None, dtype=pl.Int64).alias("trip"),
-        pl.lit(None, dtype=pl.Int64).alias("duty"),
-        pl.lit(None, dtype=pl.String).alias("route"),
-        pl.lit(None, dtype=pl.Int64).alias("alertness"),
-        pl.col("rolling_block").round(2).alias("block_hours"),
-        severity.alias("severity"),
-        message.alias("message"),
-    )
+    return peak
 
 
 def fatigue_warnings(

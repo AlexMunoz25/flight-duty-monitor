@@ -39,15 +39,15 @@ def guide_panel():
         [
             "Raised when operated block (flight) hours add up to more than {limit} h in any rolling 7-day "
             "window.".format(limit=WEEKLY_BLOCK_LIMIT_HOURS),
-            "One row per crew member — their single worst window. Window start/end give the 7 days; Block h is the total.",
+            "The workload warning count preserves the existing one-worst-window-per-crew logic; the drilldown lists every crew-day exceedance.",
             "Severity is HIGH above {high} h (more than 20% over the limit), otherwise MEDIUM.".format(high=_BLOCK_HIGH),
         ],
     )
     body = dbc.CardBody(
         [
             html.P(
-                "Each row is one warning for one crew member. Use the Crew search, or sort/scroll the pinned "
-                "Name column, to review everything for a single person.",
+                "The dashboard summarizes the uploaded roster period, then shows daily trends, route risk, and "
+                "crew-level drilldowns. Use Crew search to review one crew member.",
                 className="fdm-guide-intro",
             ),
             dbc.Row([low_alertness, block_hours], className="g-4"),
