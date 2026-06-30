@@ -28,8 +28,8 @@ def artifact_path(token, name):
     return ROSTER_CACHE / f"{token}-{name}.parquet"
 
 
-def ingest_roster(contents):
-    with tempfile.NamedTemporaryFile(suffix=".xlsx") as upload:
+def ingest_roster(contents, filename):
+    with tempfile.NamedTemporaryFile(suffix=Path(filename).suffix) as upload:
         upload.write(contents)
         upload.flush()
         roster = load_roster(upload.name)

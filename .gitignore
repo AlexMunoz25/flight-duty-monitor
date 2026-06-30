@@ -30,6 +30,7 @@ ENV/
 *.xlsx
 *.xls
 *.xlsm
+*.csv
 ~$*
 
 # Markdown docs, except README

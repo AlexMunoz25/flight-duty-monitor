@@ -20,5 +20,5 @@ def upload_callbacks(app):
         if not contents:
             raise PreventUpdate
         encoded = contents.split(",", 1)[1]
-        token = ingest_roster(base64.b64decode(encoded))
+        token = ingest_roster(base64.b64decode(encoded), filename)
         return {"token": token, "filename": filename}, dashboard_view(token), filename
