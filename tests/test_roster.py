@@ -35,3 +35,13 @@ def test_load_roster_parses_csv_block_time_renderings(tmp_path, lblock, expected
 def test_load_roster_raises_on_unrecognized_block_time(tmp_path):
     with pytest.raises(ValueError, match="Unrecognized lblock time format"):
         load_roster(write_csv(tmp_path, "3h39"))
+
+
+def test_load_roster_reads_semicolon_delimited_csv(tmp_path):
+    csv_path = tmp_path / "roster.csv"
+    csv_path.write_text("ldep_timeHB;lblock;fullname\n26/01/26 0:00;3:39:00;PEREZ, JR\n")
+
+    roster = load_roster(csv_path)
+
+    assert round(roster["lblock_hours"].item(), 2) == 3.65
+    assert roster["fullname"].item() == "PEREZ, JR"

@@ -24,8 +24,15 @@ def csv_block_time(column):
     )
 
 
+def detect_separator(path):
+    with open(path, "rb") as handle:
+        header = handle.readline()
+    counts = {separator: header.count(separator.encode()) for separator in (",", ";", "\t")}
+    return max(counts, key=counts.get)
+
+
 def read_roster_csv(path):
-    roster = pl.read_csv(path).with_columns(
+    roster = pl.read_csv(path, separator=detect_separator(path)).with_columns(
         pl.col("ldep_timeHB").str.to_datetime("%d/%m/%y %H:%M"),
         csv_block_time("lblock").alias("lblock_time"),
     )
