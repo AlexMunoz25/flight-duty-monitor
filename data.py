@@ -29,13 +29,16 @@ def artifact_path(token, name):
 
 
 def ingest_roster(contents, filename):
-    with tempfile.NamedTemporaryFile(suffix=Path(filename).suffix) as upload:
+    with tempfile.NamedTemporaryFile(suffix=Path(filename).suffix, delete=False) as upload:
         upload.write(contents)
-        upload.flush()
-        roster = load_roster(upload.name)
+        temp_path = Path(upload.name)
+    try:
+        roster = load_roster(temp_path)
         warnings = fatigue_warnings(roster)
         crew_summary = crew_operating_summary(roster)
         workload_events = rolling_block_hour_events(roster, WEEKLY_BLOCK_LIMIT_HOURS, ROLLING_WINDOW)
+    finally:
+        temp_path.unlink()
     token = uuid.uuid4().hex
     ROSTER_CACHE.mkdir(parents=True, exist_ok=True)
     warnings.write_parquet(ROSTER_CACHE / f"{token}.parquet")
