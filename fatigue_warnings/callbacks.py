@@ -1,4 +1,4 @@
-from dash import Input, Output
+from dash import Input, MATCH, Output
 from dash.exceptions import PreventUpdate
 
 from data import apply_filters, apply_workload_filters, operating_kpis
@@ -20,14 +20,13 @@ def warnings_callbacks(app):
         Output("daily-low-alertness-chart", "figure"),
         Output("daily-workload-chart", "figure"),
         Output("route-risk-chart", "figure"),
-        Output("route-risk-grid", "rowData"),
-        Output("low-alertness-grid", "rowData"),
-        Output("workload-grid", "rowData"),
+        Output({"type": "warnings-grid", "index": "route-risk-grid"}, "rowData"),
+        Output({"type": "warnings-grid", "index": "low-alertness-grid"}, "rowData"),
+        Output({"type": "warnings-grid", "index": "workload-grid"}, "rowData"),
         Input("filters-store", "data"),
-        Input("roster-store", "data"),
+        Input("active-roster-store", "data"),
     )
-    def render_warnings(filters, roster):
-        token = (roster or {}).get("token")
+    def render_warnings(filters, token):
         if not token:
             raise PreventUpdate
         filters = filters or {}
@@ -65,3 +64,13 @@ def warnings_callbacks(app):
             low_alertness_rows(frame),
             workload_rows(workload_events),
         )
+
+    @app.callback(
+        Output({"type": "warnings-grid", "index": MATCH}, "exportDataAsCsv"),
+        Input({"type": "warnings-grid-export", "index": MATCH}, "n_clicks"),
+        prevent_initial_call=True,
+    )
+    def export_grid_csv(n_clicks):
+        if not n_clicks:
+            raise PreventUpdate
+        return True

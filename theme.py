@@ -20,3 +20,8 @@ CHART_LAYOUT = {
     "legend": {"orientation": "h", "y": 1.12, "x": 0},
     "font": {"color": TEXT_PRIMARY},
 }
+
+CHART_CONFIG = {
+    "displayModeBar": True,
+    "displaylogo": False,
+}

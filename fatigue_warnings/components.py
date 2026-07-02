@@ -17,6 +17,16 @@ def section_title(text, help_id, help_text):
     )
 
 
+def export_button(grid_id):
+    return html.Button(
+        "⬇ CSV",
+        id={"type": "warnings-grid-export", "index": grid_id},
+        className="fdm-export-btn",
+        title="Export table as CSV",
+        n_clicks=0,
+    )
+
+
 def kpi_card(index, label, value, help_text):
     card_id = f"kpi-card-{index}"
     body = dbc.CardBody(
@@ -37,10 +47,11 @@ def kpi_cards(cards):
 
 def detail_grid(grid_id, column_defs, height="320px"):
     return dag.AgGrid(
-        id=grid_id,
+        id={"type": "warnings-grid", "index": grid_id},
         columnDefs=column_defs,
         defaultColDef=DEFAULT_COL_DEF,
         className=GRID_THEME,
+        csvExportParams={"fileName": f"{grid_id}.csv"},
         dashGridOptions={
             "pagination": True,
             "paginationPageSize": 25,

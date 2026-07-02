@@ -4,9 +4,9 @@ from dash import Dash
 from fatigue_warnings.callbacks import warnings_callbacks
 from filters.callbacks import filters_callbacks
 from layout import root_layout
-from upload.callbacks import upload_callbacks
+from sidebar.callbacks import sidebar_callbacks
 
-FEATURE_CALLBACKS = [upload_callbacks, filters_callbacks, warnings_callbacks]
+FEATURE_CALLBACKS = [sidebar_callbacks, filters_callbacks, warnings_callbacks]
 
 
 def build_dashboard():

@@ -2,8 +2,9 @@ import dash_bootstrap_components as dbc
 from dash import dcc, html
 
 from data import threshold_label
-from fatigue_warnings.components import detail_grid, section_title
+from fatigue_warnings.components import detail_grid, export_button, section_title
 from fatigue_warnings.models import LOW_ALERTNESS_COLUMN_DEFS, ROUTE_RISK_COLUMN_DEFS, WORKLOAD_COLUMN_DEFS
+from theme import CHART_CONFIG
 
 
 def chart_card(title, help_id, help_text, graph_id):
@@ -11,7 +12,7 @@ def chart_card(title, help_id, help_text, graph_id):
         dbc.CardBody(
             [
                 section_title(title, help_id, help_text),
-                dcc.Graph(id=graph_id, config={"displayModeBar": False}),
+                dcc.Graph(id=graph_id, config=CHART_CONFIG),
             ]
         ),
         className="fdm-chart-card",
@@ -22,6 +23,7 @@ def grid_card(title, help_id, help_text, grid_id, column_defs, height="320px"):
     return dbc.Card(
         dbc.CardBody(
             [
+                export_button(grid_id),
                 section_title(title, help_id, help_text),
                 detail_grid(grid_id, column_defs, height),
             ]

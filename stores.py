@@ -1,7 +1,8 @@
 from dash import dcc
 
 ROSTER_STORES = {
-    "roster_store": dcc.Store(id="roster-store", storage_type="memory"),
+    "rosters_store": dcc.Store(id="rosters-store", storage_type="memory", data=[]),
+    "active_roster_store": dcc.Store(id="active-roster-store", storage_type="memory"),
 }
 
 FILTER_STORES = {
