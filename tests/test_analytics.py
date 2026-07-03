@@ -6,6 +6,7 @@ from analytics import (
     WARNING_COLUMNS,
     block_hour_warnings,
     crew_operating_summary,
+    daily_flight_counts,
     fatigue_warnings,
     low_alertness_warnings,
     rolling_block_hour_events,
@@ -42,6 +43,20 @@ def test_crew_operating_summary_counts_operated_legs_and_block_hours():
     assert summary["block_hours"][0] == 5.5
     assert summary["period_start"][0] == dt.date(2026, 1, 5)
     assert summary["period_end"][0] == dt.date(2026, 1, 6)
+
+
+def test_daily_flight_counts_aggregate_operated_legs_per_crew_day():
+    rows = [
+        _leg(1, 5, lnum=1, block=2.0),
+        _leg(1, 5, lnum=2, block=1.5),
+        _leg(1, 6, lnum=1, block=2.0),
+        _leg(2, 5, onduty=False, flightduty=False, lnum=None, block=9.0),
+    ]
+    counts = daily_flight_counts(_roster(rows))
+    day5 = counts.filter((pl.col("crew_id") == 1) & (pl.col("day") == dt.date(2026, 1, 5)))
+    assert day5["flight_count"][0] == 2
+    assert day5["block_hours"][0] == 3.5
+    assert counts.filter(pl.col("crew_id") == 2).height == 0
 
 
 def test_rolling_block_hour_events_keep_daily_exceedances():

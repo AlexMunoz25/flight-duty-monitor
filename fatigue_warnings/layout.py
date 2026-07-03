@@ -3,7 +3,12 @@ from dash import dcc, html
 
 from data import threshold_label
 from fatigue_warnings.components import detail_grid, export_button, section_title
-from fatigue_warnings.models import LOW_ALERTNESS_COLUMN_DEFS, ROUTE_RISK_COLUMN_DEFS, WORKLOAD_COLUMN_DEFS
+from fatigue_warnings.models import (
+    FLIGHT_COUNT_COLUMN_DEFS,
+    LOW_ALERTNESS_COLUMN_DEFS,
+    ROUTE_RISK_COLUMN_DEFS,
+    WORKLOAD_COLUMN_DEFS,
+)
 from theme import CHART_CONFIG
 
 
@@ -51,13 +56,11 @@ def warnings_layout():
         "Routes with low-alertness events, sorted by event count and minimum alertness.",
         "route-risk-chart",
     )
-    route_detail = grid_card(
-        "Route risk detail",
-        "route-risk-grid-help",
-        "Route-level low-alertness counts, affected crew, alertness values, and flagged block hours.",
-        "route-risk-grid",
-        ROUTE_RISK_COLUMN_DEFS,
-        "300px",
+    daily_flight_count = chart_card(
+        "Daily flight-count workload",
+        "daily-flight-count-help",
+        "Crew who operated more than the selected flights/day limit, counted by day. Set the limit (4, 5, or 6) in the filter bar.",
+        "daily-flight-count-chart",
     )
     low_alertness_detail = grid_card(
         "Low-alertness event drilldown",
@@ -75,14 +78,32 @@ def warnings_layout():
         WORKLOAD_COLUMN_DEFS,
         "360px",
     )
+    route_detail = grid_card(
+        "Route risk detail",
+        "route-risk-grid-help",
+        "Route-level low-alertness counts, affected crew, alertness values, and flagged block hours.",
+        "route-risk-grid",
+        ROUTE_RISK_COLUMN_DEFS,
+        "360px",
+    )
+    flight_count_detail = grid_card(
+        "Daily flight-count drilldown",
+        "flight-count-grid-help",
+        "One row per crew-day where operated flights exceeded the selected flights/day limit.",
+        "flight-count-grid",
+        FLIGHT_COUNT_COLUMN_DEFS,
+        "360px",
+    )
     return html.Div(
         [
             dbc.Row(id="kpi-row", className="fdm-kpi-row g-3"),
             html.Div(threshold_label(), className="fdm-threshold-label"),
             dbc.Row([dbc.Col(daily_low_alertness, lg=6), dbc.Col(daily_workload, lg=6)], className="g-3"),
-            dbc.Row([dbc.Col(route_risk, lg=6), dbc.Col(route_detail, lg=6)], className="g-3"),
+            dbc.Row([dbc.Col(route_risk, lg=6), dbc.Col(daily_flight_count, lg=6)], className="g-3"),
             low_alertness_detail,
             workload_detail,
+            route_detail,
+            flight_count_detail,
         ],
         className="fdm-content",
     )

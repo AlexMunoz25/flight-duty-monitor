@@ -12,6 +12,8 @@ class FatigueConfig:
     low_alertness_threshold: int
     weekly_block_limit_hours: int
     rolling_window: str
+    daily_flight_limits: tuple[int, ...]
+    daily_flight_limit_default: int
 
 
 def load_fatigue_config(path=CONFIG_PATH):
@@ -20,6 +22,8 @@ def load_fatigue_config(path=CONFIG_PATH):
         low_alertness_threshold=fatigue["low_alertness_threshold"],
         weekly_block_limit_hours=fatigue["weekly_block_limit_hours"],
         rolling_window=fatigue["rolling_window"],
+        daily_flight_limits=tuple(fatigue["daily_flight_limits"]),
+        daily_flight_limit_default=fatigue["daily_flight_limit_default"],
     )
 
 
@@ -27,6 +31,8 @@ FATIGUE_CONFIG = load_fatigue_config()
 LOW_ALERTNESS_THRESHOLD = FATIGUE_CONFIG.low_alertness_threshold
 WEEKLY_BLOCK_LIMIT_HOURS = FATIGUE_CONFIG.weekly_block_limit_hours
 ROLLING_WINDOW = FATIGUE_CONFIG.rolling_window
+DAILY_FLIGHT_LIMITS = FATIGUE_CONFIG.daily_flight_limits
+DAILY_FLIGHT_LIMIT_DEFAULT = FATIGUE_CONFIG.daily_flight_limit_default
 
 WARNING_COLUMNS = [
     "warning_type",
@@ -66,6 +72,18 @@ def crew_operating_summary(roster):
             pl.col("day").max().alias("period_end"),
         )
         .sort("block_hours", descending=True)
+    )
+
+
+def daily_flight_counts(roster):
+    legs = operational_legs(roster).with_columns(pl.col("ldep_timeHB").dt.date().alias("day"))
+    return (
+        legs.group_by("crew_id", "fullname", "rank", "homebase", "day")
+        .agg(
+            pl.len().alias("flight_count"),
+            pl.col("lblock_hours").sum().round(2).alias("block_hours"),
+        )
+        .sort(["day", "flight_count"], descending=[True, True])
     )
 
 

@@ -10,6 +10,7 @@ from analytics import (
     ROLLING_WINDOW,
     WEEKLY_BLOCK_LIMIT_HOURS,
     crew_operating_summary,
+    daily_flight_counts,
     fatigue_warnings,
     rolling_block_hour_events,
 )
@@ -37,6 +38,7 @@ def ingest_roster(contents, filename):
         warnings = fatigue_warnings(roster)
         crew_summary = crew_operating_summary(roster)
         workload_events = rolling_block_hour_events(roster, WEEKLY_BLOCK_LIMIT_HOURS, ROLLING_WINDOW)
+        flight_counts = daily_flight_counts(roster)
     finally:
         temp_path.unlink()
     token = uuid.uuid4().hex
@@ -44,6 +46,7 @@ def ingest_roster(contents, filename):
     warnings.write_parquet(ROSTER_CACHE / f"{token}.parquet")
     crew_summary.write_parquet(artifact_path(token, "crew-summary"))
     workload_events.write_parquet(artifact_path(token, "workload-events"))
+    flight_counts.write_parquet(artifact_path(token, "flight-counts"))
     return token
 
 
@@ -60,6 +63,11 @@ def crew_summary_frame(token):
 @lru_cache(maxsize=8)
 def workload_events_frame(token):
     return pl.read_parquet(artifact_path(token, "workload-events"))
+
+
+@lru_cache(maxsize=8)
+def flight_counts_frame(token):
+    return pl.read_parquet(artifact_path(token, "flight-counts"))
 
 
 def distinct_values(token, column):
@@ -94,6 +102,11 @@ def apply_workload_filters(token, warning_type=None, severity=None, ranks=None, 
         frame = frame.filter(pl.lit(False))
     if severity:
         frame = frame.filter(pl.col("severity") == severity)
+    return apply_crew_filters(frame, ranks, homebases, crew_query)
+
+
+def apply_flight_count_filters(token, limit, ranks=None, homebases=None, crew_query=None):
+    frame = flight_counts_frame(token).filter(pl.col("flight_count") > limit)
     return apply_crew_filters(frame, ranks, homebases, crew_query)
 
 

@@ -1,6 +1,16 @@
 from dash import dcc, html
 
 
+def sidebar_toggle():
+    return html.Button(
+        "☰",
+        id="sidebar-toggle",
+        className="fdm-hamburger",
+        title="Collapse or expand the sidebar",
+        n_clicks=0,
+    )
+
+
 def upload_control():
     return dcc.Upload(
         id="roster-upload",

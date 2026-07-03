@@ -1,5 +1,6 @@
 from dash import Input, Output
 
+from analytics import DAILY_FLIGHT_LIMIT_DEFAULT
 from filters.utils import ALL, clear_sentinel
 
 
@@ -8,14 +9,16 @@ def filters_callbacks(app):
         Output("filters-store", "data"),
         Input("filter-type", "value"),
         Input("filter-severity", "value"),
+        Input("filter-flight-limit", "value"),
         Input("filter-rank", "value"),
         Input("filter-homebase", "value"),
         Input("filter-crew", "value"),
     )
-    def collect_filters(warning_type, severity, ranks, homebases, crew):
+    def collect_filters(warning_type, severity, flight_limit, ranks, homebases, crew):
         return {
             "warning_type": clear_sentinel(warning_type),
             "severity": clear_sentinel(severity),
+            "flight_limit": int(flight_limit),
             "ranks": ranks,
             "homebases": homebases,
             "crew": crew,
@@ -24,6 +27,7 @@ def filters_callbacks(app):
     @app.callback(
         Output("filter-type", "value"),
         Output("filter-severity", "value"),
+        Output("filter-flight-limit", "value"),
         Output("filter-rank", "value"),
         Output("filter-homebase", "value"),
         Output("filter-crew", "value"),
@@ -31,4 +35,4 @@ def filters_callbacks(app):
         prevent_initial_call=True,
     )
     def reset_filters(_clicks):
-        return ALL, ALL, [], [], ""
+        return ALL, ALL, DAILY_FLIGHT_LIMIT_DEFAULT, [], [], ""

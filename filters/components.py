@@ -22,6 +22,11 @@ def select_field(control_id, label, values, help_text, labels=None):
     return _field(control_id, label, dbc.Select(id=control_id, options=options, value=ALL, size="sm"), help_text)
 
 
+def choice_field(control_id, label, values, default, help_text):
+    options = [{"label": str(value), "value": value} for value in values]
+    return _field(control_id, label, dbc.Select(id=control_id, options=options, value=default, size="sm"), help_text)
+
+
 def multi_field(control_id, label, values, help_text):
     options = [{"label": value, "value": value} for value in values]
     control = dcc.Dropdown(id=control_id, options=options, multi=True, placeholder="All", className="fdm-dropdown")

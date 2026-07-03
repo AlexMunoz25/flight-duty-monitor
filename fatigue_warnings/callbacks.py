@@ -1,11 +1,14 @@
 from dash import Input, MATCH, Output
 from dash.exceptions import PreventUpdate
 
-from data import apply_filters, apply_workload_filters, operating_kpis
+from analytics import DAILY_FLIGHT_LIMIT_DEFAULT
+from data import apply_filters, apply_flight_count_filters, apply_workload_filters, operating_kpis
 from fatigue_warnings.components import kpi_cards
 from fatigue_warnings.utils import (
+    daily_flight_count_chart,
     daily_low_alertness_chart,
     daily_workload_chart,
+    flight_count_rows,
     low_alertness_rows,
     route_risk_chart,
     route_risk_frame,
@@ -20,9 +23,11 @@ def warnings_callbacks(app):
         Output("daily-low-alertness-chart", "figure"),
         Output("daily-workload-chart", "figure"),
         Output("route-risk-chart", "figure"),
-        Output({"type": "warnings-grid", "index": "route-risk-grid"}, "rowData"),
+        Output("daily-flight-count-chart", "figure"),
         Output({"type": "warnings-grid", "index": "low-alertness-grid"}, "rowData"),
         Output({"type": "warnings-grid", "index": "workload-grid"}, "rowData"),
+        Output({"type": "warnings-grid", "index": "route-risk-grid"}, "rowData"),
+        Output({"type": "warnings-grid", "index": "flight-count-grid"}, "rowData"),
         Input("filters-store", "data"),
         Input("active-roster-store", "data"),
     )
@@ -46,6 +51,14 @@ def warnings_callbacks(app):
             homebases=filters.get("homebases"),
             crew_query=filters.get("crew"),
         )
+        flight_limit = filters.get("flight_limit") or DAILY_FLIGHT_LIMIT_DEFAULT
+        flight_counts = apply_flight_count_filters(
+            token,
+            flight_limit,
+            ranks=filters.get("ranks"),
+            homebases=filters.get("homebases"),
+            crew_query=filters.get("crew"),
+        )
         route_risk = route_risk_frame(frame)
         return (
             kpi_cards(
@@ -60,9 +73,11 @@ def warnings_callbacks(app):
             daily_low_alertness_chart(frame),
             daily_workload_chart(workload_events),
             route_risk_chart(route_risk),
-            route_rows(route_risk),
+            daily_flight_count_chart(flight_counts),
             low_alertness_rows(frame),
             workload_rows(workload_events),
+            route_rows(route_risk),
+            flight_count_rows(flight_counts),
         )
 
     @app.callback(

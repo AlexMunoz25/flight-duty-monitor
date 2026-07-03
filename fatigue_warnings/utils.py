@@ -13,6 +13,21 @@ def daily_workload_chart(workload_events):
     return severity_day_chart(workload_events, "Crew over limit")
 
 
+def daily_flight_count_chart(flight_counts):
+    days = sorted(flight_counts["day"].unique().drop_nulls().to_list())
+    grouped = flight_counts.group_by("day").agg(pl.len().alias("crew_count"))
+    counts = {row["day"]: row["crew_count"] for row in grouped.to_dicts()}
+    figure = go.Figure()
+    figure.add_bar(
+        x=days,
+        y=[counts.get(day, 0) for day in days],
+        marker_color=ACCENT,
+        name="Crew over limit",
+    )
+    figure.update_layout(**CHART_LAYOUT, xaxis_title=None, yaxis_title="Crew over limit")
+    return figure
+
+
 def severity_day_chart(frame, y_title):
     days = sorted(frame["window_end"].unique().drop_nulls().to_list())
     grouped = frame.group_by("window_end", "severity").len()
@@ -82,6 +97,14 @@ def workload_rows(workload_events):
     display = workload_events.with_columns(
         pl.col("window_start").cast(pl.String),
         pl.col("window_end").cast(pl.String),
+        pl.col("block_hours").round(1),
+    )
+    return display.to_dicts()
+
+
+def flight_count_rows(flight_counts):
+    display = flight_counts.with_columns(
+        pl.col("day").cast(pl.String),
         pl.col("block_hours").round(1),
     )
     return display.to_dicts()

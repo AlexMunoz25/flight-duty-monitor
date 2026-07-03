@@ -57,3 +57,13 @@ ROUTE_RISK_COLUMN_DEFS = [
     {"headerName": "First event", "field": "first_event", "width": 125},
     {"headerName": "Last event", "field": "last_event", "width": 125},
 ]
+
+FLIGHT_COUNT_COLUMN_DEFS = [
+    {"headerName": "Crew ID", "field": "crew_id", "width": 100, "pinned": "left"},
+    {"headerName": "Name", "field": "fullname", "width": 230, "pinned": "left", "sort": "asc"},
+    {"headerName": "Rank", "field": "rank", "width": 90},
+    {"headerName": "Base", "field": "homebase", "width": 80},
+    {"headerName": "Date", "field": "day", "width": 120},
+    {"headerName": "Flights", "field": "flight_count", "width": 110},
+    {"headerName": "Block h", "field": "block_hours", "width": 100},
+]

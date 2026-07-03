@@ -1,6 +1,6 @@
 import base64
 
-from dash import ALL, Input, Output, State, ctx
+from dash import ALL, ClientsideFunction, Input, Output, State, ctx
 from dash.exceptions import PreventUpdate
 
 from data import ingest_roster
@@ -55,3 +55,17 @@ def sidebar_callbacks(app):
     )
     def render_roster_list(rosters, active):
         return roster_items(rosters or [], active)
+
+    app.clientside_callback(
+        ClientsideFunction(namespace="sidebar", function_name="toggle"),
+        Output("sidebar-collapsed-store", "data"),
+        Input("sidebar-toggle", "n_clicks"),
+        State("sidebar-collapsed-store", "data"),
+        prevent_initial_call=True,
+    )
+
+    app.clientside_callback(
+        ClientsideFunction(namespace="sidebar", function_name="applyCollapsed"),
+        Output("fdm-app", "className"),
+        Input("sidebar-collapsed-store", "data"),
+    )

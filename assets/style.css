@@ -5,8 +5,54 @@ body {
 
 .fdm-app {
     display: flex;
-    align-items: stretch;
+    flex-direction: column;
     min-height: 100vh;
+}
+
+.fdm-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 44px;
+    padding: 0 12px;
+    background-color: #11161d;
+    border-bottom: 1px solid #30363d;
+}
+
+.fdm-hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: 18px;
+    color: #8b949e;
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.fdm-hamburger:hover {
+    color: #e6edf3;
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.fdm-topbar-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e6edf3;
+}
+
+.fdm-body {
+    display: flex;
+    flex: 1 1 auto;
+    align-items: stretch;
+    min-height: 0;
+}
+
+.fdm-app.collapsed .fdm-sidebar {
+    display: none;
 }
 
 .fdm-sidebar {

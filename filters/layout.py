@@ -1,8 +1,9 @@
 import dash_bootstrap_components as dbc
 from dash import html
 
+from analytics import DAILY_FLIGHT_LIMIT_DEFAULT, DAILY_FLIGHT_LIMITS
 from data import WARNING_TYPE_LABELS, distinct_values
-from filters.components import multi_field, search_field, select_field
+from filters.components import choice_field, multi_field, search_field, select_field
 
 
 def filters_layout(token):
@@ -19,6 +20,13 @@ def filters_layout(token):
             "Severity",
             ["HIGH", "MEDIUM"],
             "HIGH = the more extreme cases (deep alertness debt or well over the block-hour limit). MEDIUM = past the limit but less extreme.",
+        ),
+        choice_field(
+            "filter-flight-limit",
+            "Flights/day limit",
+            DAILY_FLIGHT_LIMITS,
+            DAILY_FLIGHT_LIMIT_DEFAULT,
+            "Flag crew who operated more than this many flights in a single day. Drives the daily flight-count chart and table.",
         ),
         multi_field("filter-rank", "Rank", distinct_values(token, "rank"), "Filter by crew rank (CAP, OFI, EJE, SOB)."),
         multi_field("filter-homebase", "Home base", distinct_values(token, "homebase"), "Filter by the crew member's home base."),
